@@ -1,5 +1,5 @@
-#!/bin/ash
+#!/bin/bash
 localDir=/mnt/sda3/Youtube/audio/`date +"%Y-%m-%d"`
 echo $localDir
 mkdir -p ${localDir} 2>/dev/null
-docker run -i --rm -v ${localDir}:/data falconchen/arm64v8-yt-dlp -f bestaudio $@
+docker run -i --rm -v ${localDir}:/data falconchen/amd64-yt-dlp -f bestaudio $@

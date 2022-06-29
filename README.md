@@ -1,4 +1,4 @@
-# Docker for yt-dlp arm64v8 with ffmpeg supported
+# Docker for yt-dlp amd64 with ffmpeg supported
 
 ## download video demo
 ```
