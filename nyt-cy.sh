@@ -6,17 +6,18 @@ localDir=/mnt/tmp/Youtube/video/${randnum}
 caiyunDir=/mnt/caiyunDisk/Youtube/video/`date +"%Y-%m-%d"`
 nohupOutDir=/tmp/youtube-cy
 
-echo $localDir
+echo "tmpDir: $localDir"
+echo "log: tail -f ${nohupOutDir}/${randnum}"
+
 mkdir -p ${localDir} 2>/dev/null
-docker run -i --rm -v ${localDir}:/data falconchen/amd64-yt-dlp $@
-
 mkdir -p ${caiyunDir} 2>/dev/null
-
-echo "move to ${caiyunDir}"
-
 mkdir -p ${nohupOutDir} 2>/dev/null
 
-nohup mv -vf ${localDir}/* ${caiyunDir} >${nohupOutDir}/${randnum} 2>&1 &
+nohup bash -c "docker run -i --rm -v ${localDir}:/data falconchen/amd64-yt-dlp $@  && \
+echo \"move to ${caiyunDir}\" && \
+mv -vf ${localDir}/* ${caiyunDir} && \
+rm -rf ${localDir}" \
+>${nohupOutDir}/${randnum} 2>&1 &
 
 exit
 
