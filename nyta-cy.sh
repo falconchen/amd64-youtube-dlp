@@ -2,8 +2,8 @@
 
 randnum=$(head -20 /dev/urandom | cksum | cut -f1 -d " ")
 
-localDir=/mnt/tmp/Youtube/video/${randnum}
-caiyunDir=/mnt/caiyunDisk/Youtube/video/`date +"%Y-%m-%d"`
+localDir=/mnt/tmp/Youtube/audio/${randnum}
+caiyunDir=/mnt/caiyunDisk/Youtube/audio/`date +"%Y-%m-%d"`
 nohupOutDir=/tmp/youtube-cy
 
 echo "tmpDir: $localDir"
@@ -13,8 +13,9 @@ mkdir -p ${localDir} 2>/dev/null
 mkdir -p ${caiyunDir} 2>/dev/null
 mkdir -p ${nohupOutDir} 2>/dev/null
 
-nohup bash -c "docker run -i --rm -v ${localDir}:/data falconchen/amd64-yt-dlp \
--f \"bestvideo[ext=mp4]+(258/256/140)/bestvideo[ext=webm]+(250/249)/best\" \"$@\"  && \
+#nohup bash -c "docker run -i --rm -v ${localDir}:/data falconchen/amd64-yt-dlp -f bestaudio[ext=m4a]/best[ext=mp4]/best  \"$@\"  && \
+nohup bash -c "docker run -i --rm -v ${localDir}:/data falconchen/amd64-yt-dlp -f bestaudio[ext=m4a]/bestaudio[ext=mp4]/bestaudio[ext=webm] \
+  \"$@\"  && \
 echo \"move to ${caiyunDir}\" && \
 mv -vf ${localDir}/* ${caiyunDir} && \
 rm -rf ${localDir}" \
