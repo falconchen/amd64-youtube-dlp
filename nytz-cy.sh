@@ -25,6 +25,7 @@ zip -r ${vid}.zip *
 
 echo \"move to ${caiyunDir}\" && \
 mv -vf ${localDir}/${vid}.zip ${caiyunDir} && \
+echo \"remove ${localDir}\" && \
 rm -rf ${localDir}" \
 >${nohupOutDir}/${vid} 2>&1 &
 
