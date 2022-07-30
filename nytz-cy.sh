@@ -18,7 +18,7 @@ mkdir -p ${caiyunDir} 2>/dev/null
 mkdir -p ${nohupOutDir} 2>/dev/null
 
 nohup bash -c "docker run -i --rm -v ${localDir}:/data falconchen/amd64-yt-dlp \
--f \"bestvideo[ext=mp4]+(258/256/140)/bestvideo[ext=webm]+(250/249)/best\" \"$@\"  && \
+\"$@\"  && \
 
 cd $localDir && \
 zip -r ${vid}.zip *
