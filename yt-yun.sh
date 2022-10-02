@@ -1,11 +1,14 @@
 #!/bin/bash
 
-randnum=$(head -20 /dev/urandom | cksum | cut -f1 -d " ")
+vid=$(head -20 /dev/urandom | cksum | cut -f1 -d " ")
+url="${@: -1}"
+vid=${url#*?v=}
 
-localDir=/mnt/tmp/Youtube/video/${randnum}
+localDir=/mnt/tmp/Youtube/video/${vid}
 caiyunDir=/mnt/caiyunDisk/Youtube/video/`date +"%Y-%m-%d"`
 nohupOutDir=/tmp/youtube-cy
 
+echo "================"
 echo $localDir
 mkdir -p ${localDir} 2>/dev/null
 docker run -i --rm -v ${localDir}:/data falconchen/amd64-yt-dlp $@
@@ -16,9 +19,9 @@ echo "move to ${caiyunDir}"
 
 mkdir -p ${nohupOutDir} 2>/dev/null
 
-nohup mv -vf ${localDir}/* ${caiyunDir} >${nohupOutDir}/${randnum} 2>&1 &
+mv -vf ${localDir}/* ${caiyunDir} >${nohupOutDir}/${vid} 2>&1 
+rmdir ${localDir}
 
-exit
 
 #echo "delete tmp dir ${localDir}" 
 #rm -rf ${localDir}

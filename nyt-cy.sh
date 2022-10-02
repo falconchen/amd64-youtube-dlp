@@ -14,7 +14,7 @@ mkdir -p ${caiyunDir} 2>/dev/null
 mkdir -p ${nohupOutDir} 2>/dev/null
 
 nohup bash -c "docker run -i --rm -v ${localDir}:/data falconchen/amd64-yt-dlp \
--f \"bestvideo[ext=mp4]+(258/256/140)/bestvideo[ext=webm]+(250/249)/best\" \"$@\"  && \
+-f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/bestvideo[ext=mp4]+(258/256/140)/bestvideo[ext=webm]+(250/249)/bestvideo[ext=webm]+bestaudio/mp4/best' \"$@\"  && \
 echo \"move to ${caiyunDir}\" && \
 mv -vf ${localDir}/* ${caiyunDir} && \
 rm -rf ${localDir}" \
