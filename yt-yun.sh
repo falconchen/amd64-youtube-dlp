@@ -1,12 +1,11 @@
 #!/bin/bash
 
-vid=$(head -20 /dev/urandom | cksum | cut -f1 -d " ")
-url="${@: -1}"
-vid=${url#*?v=}
+url="${@: -1}" 
+vid=`docker run -i --rm falconchen/amd64-yt-dlp --get-id ${url}`
 
 localDir=/mnt/tmp/Youtube/video/${vid}
 caiyunDir=/mnt/caiyunDisk/Youtube/video/`date +"%Y-%m-%d"`
-nohupOutDir=/tmp/youtube-cy
+nohupOutDir=/mnt/tmp/log
 
 echo "================"
 echo $localDir

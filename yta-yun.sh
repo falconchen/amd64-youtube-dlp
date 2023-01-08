@@ -1,17 +1,20 @@
 #!/bin/bash
 
-vid=$(head -20 /dev/urandom | cksum | cut -f1 -d " ")
-url="${@: -1}"
-vid=${url#*?v=}
+
+url="${@: -1}" 
+vid=`docker run -i --rm falconchen/amd64-yt-dlp --get-id ${url}`
 
 localDir=/mnt/tmp/Youtube/audio/${vid}
 caiyunDir=/mnt/caiyunDisk/Youtube/audio/`date +"%Y-%m-%d"`
-nohupOutDir=/tmp/youtube-cy
+nohupOutDir=/mnt/tmp/log
 
 echo "================"
 echo $localDir
 mkdir -p ${localDir} 2>/dev/null
-docker run -i --rm -v ${localDir}:/data falconchen/amd64-yt-dlp -f bestaudio --audio-format mp3 --audio-quality 0 $@
+docker run -i --rm \
+-v /root/docker-configs/youtube-dlp/yta-dlp.conf:/etc/yt-dlp.conf \
+-v ${localDir}:/data falconchen/amd64-yt-dlp \
+-f bestaudio  --audio-quality 0 $@
 
 mkdir -p ${caiyunDir} 2>/dev/null
 

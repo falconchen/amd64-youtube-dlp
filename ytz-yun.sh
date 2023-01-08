@@ -22,7 +22,8 @@ docker run -i --rm -v ${localDir}:/data falconchen/amd64-yt-dlp \
 
 cd $localDir && \
 title=`docker run -i --rm -v ${localDir}:/data falconchen/amd64-yt-dlp -e ${url}`
-zipName="${title:0:20}-${vid}.zip"
+zipName="${title:0:42}-${vid}.zip"
+rm -rf "${zipName}" 2>/dev/null
 zip -r "${zipName}" *
 
 echo "move to ${caiyunDir}" && \
