@@ -9,6 +9,7 @@ vid=`docker run -i --rm falconchen/amd64-yt-dlp --get-id ${url}`
 localDir=/mnt/tmp/Youtube/video/${vid}
 #caiyunDir=/mnt/alist/139yun/Youtube/video/`date +"%Y-%m-%d"`
 caiyunDir=/mnt/caiyunDisk/Youtube/video/`date +"%Y-%m-%d"`
+sDir=/mnt/sDisk/Youtube/video/`date +"%Y-%m-%d"`
 nohupOutLog=/root/docker-configs/youtube-dlp/nyt-yun.log
 
 echo "url: $url"
@@ -21,7 +22,7 @@ mkdir -p ${localDir} 2>/dev/null
 #  mkdir "$caiyunDir"
 #fi
 
-mkdir "$caiyunDir" 2>/dev/null
+mkdir -p "$sDir" 2>/dev/null
 mkdir -p ${nohupOutDir} 2>/dev/null
 
 title=`docker run -i --rm -v ${localDir}:/data falconchen/amd64-yt-dlp -e ${url}`
@@ -38,11 +39,6 @@ zipName=${zipName//\"/_}
 zipName=${zipName//\'/_}
 
 
-if [ -f "${caiyunDir}/${zipName}" ]; then
-   echo "Skip, Exits on yun Disk"
-   exit
-fi
-
 docker run -i --rm -v ${localDir}:/data falconchen/amd64-yt-dlp \
 -f '22/(bv*[vcodec^=vp9][height<=1024]+ba[acodec=opus])/137+ba[ext=m4a]/137+ba/302+ba[ext=m4a]/302+ba/bestvideo[ext=mp4]+bestaudio[ext=m4a]/bestvideo[ext=mp4]+(258/256/140)/bestvideo[ext=webm]+(250/249)/bestvideo[ext=webm]+bestaudio/mp4/best' \
 "$@" 
@@ -53,9 +49,17 @@ cd $localDir && \
 rm -rf "${zipName}" 2>/dev/null
 zip -r "${zipName}" *
 
+echo "copy to sDir: $sDir"
+cp -r "${localDir}/${zipName}" ${sDir}
 size=`du -sh ${zipName} | awk '{print $1}'`
 
 echo "move to ${caiyunDir}" 
+mkdir "$caiyunDir" 2>/dev/null
+if [ -f "${caiyunDir}/${zipName}" ]; then
+   echo "Skip, Exits on yun Disk"
+   exit
+fi
+
 icon="✅"
 error=`mv -vf "${localDir}/${zipName}" ${caiyunDir} `
 if [[ "$?" -ne "0" ]];then 

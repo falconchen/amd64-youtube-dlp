@@ -6,6 +6,7 @@ vid=`docker run -i --rm falconchen/amd64-yt-dlp --get-id ${url}`
 
 localDir=/mnt/tmp/Youtube/audio/${vid}
 caiyunDir=/mnt/caiyunDisk/Youtube/audio/`date +"%Y-%m-%d"`
+sDir=/mnt/sDisk/Youtube/audio/`date +"%Y-%m-%d"`
 nohupOutDir=/mnt/tmp/log
 
 echo "================"
@@ -16,11 +17,20 @@ docker run -i --rm \
 -v ${localDir}:/data falconchen/amd64-yt-dlp \
 -f bestaudio  --audio-quality 0 $@
 
+
+
+echo "copy to sDir: ${sDir}"
+
+mkdir -p ${sDir} 2>/dev/null
+cp -r ${localDir}/* ${sDir} >${nohupOutDir}/${vid} 2>&1 
+
 mkdir -p ${caiyunDir} 2>/dev/null
 
 echo "move to ${caiyunDir}"
 
 mkdir -p ${nohupOutDir} 2>/dev/null
+
+
 
 mv -vf ${localDir}/* ${caiyunDir} >${nohupOutDir}/${vid} 2>&1 
 rmdir ${localDir}
